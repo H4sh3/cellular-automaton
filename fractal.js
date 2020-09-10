@@ -4,13 +4,19 @@ let color;
 let uniqCenter;
 let stats;
 
-let rgbOffsets;
-
 let settings = {
   strokeOn: true,
   nRange: 1,
   frameRate: getFrameRateFor(1),
   size: 32,
+  rgbOffsets: [],
+  initColorOffsets: function () {
+    const x = []
+    for (let i = 0; i < 3; i++) {
+      x.push(Math.floor(random(0, 9)))
+    }
+    this.rgbOffsets = shuffle(x);
+  },
   toggleStroke: function () {
     this.strokeOn = !this.strokeOn;
     if (this.strokeOn) {
@@ -24,17 +30,17 @@ let settings = {
     frameRate(getFrameRateFor(this.nRange))
     activateButton(`n${n}`)
     setOtherButtonsInactive(n)
-    initState()
+    initField()
   },
   changeFr: function (v) {
     this.frameRate = this.frameRate + v > 0 ? this.frameRate + v : this.frameRate;
     frameRate(this.frameRate);
   },
-  changeSize: function (v) { 
-    this.size = Math.min(Math.max(this.size*v, 16), 128)
+  changeSize: function (v) {
+    this.size = Math.min(Math.max(this.size * v, 16), 128)
     setFieldSize(this.size)
     state.blockSize = width / settings.size;
-    initState();
+    initField();
   }
 }
 
@@ -61,7 +67,7 @@ function deactivateButton(id) {
   document.getElementById(id).className = 'button is-info'
 }
 
-function setFieldSize(n){
+function setFieldSize(n) {
   document.getElementById('fieldsize').innerText = `${n}x${n} px`
 }
 
@@ -70,7 +76,8 @@ function setup() {
   modby = 0;
   color = 0;
 
-  rgbOffsets = shuffle([0, 2, 4]);
+  settings.initColorOffsets()
+
 
   frameRate(settings.frameRate)
   const width = initCanvas();
@@ -78,10 +85,10 @@ function setup() {
   background(120, 120, 120);
   state.blockSize = width / settings.size;
   setFieldSize(settings.size)
-  initState()
+  initField()
 }
 
-function initState() {
+function initField() {
   state.field = []
   for (let x = 0; x <= settings.size; x++) {
     state.field.push([])
@@ -181,9 +188,9 @@ function getColor(nn) {
     newcolor = newcolor % range;
   }
 
-  var r = Math.sin(frequency * newcolor + rgbOffsets[0]) * width + center;
-  var g = Math.sin(frequency * newcolor + rgbOffsets[1]) * width + center;
-  var b = Math.sin(frequency * newcolor + rgbOffsets[2]) * width + center;
+  var r = Math.sin(frequency * newcolor + settings.rgbOffsets[0]) * width + center;
+  var g = Math.sin(frequency * newcolor + settings.rgbOffsets[1]) * width + center;
+  var b = Math.sin(frequency * newcolor + settings.rgbOffsets[2]) * width + center;
 
   return { r, g, b, a: 255 };
 };
