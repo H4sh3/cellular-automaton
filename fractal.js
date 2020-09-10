@@ -7,15 +7,22 @@ let stats;
 let rgbOffsets;
 
 let settings = {
-  strokeOn: false,
+  strokeOn: true,
   nRange: 1,
-  frameRate: 5,
+  frameRate: getFrameRateFor(1),
+  size: 32,
   toggleStroke: function () {
     this.strokeOn = !this.strokeOn;
+    if (this.strokeOn) {
+      activateButton('strokeButton')
+    } else {
+      deactivateButton('strokeButton')
+    }
   },
   changeNRange: function (n) {
     this.nRange = n;
-    document.getElementById(`n${n}`).className = 'button is-success'
+    frameRate(getFrameRateFor(this.nRange))
+    activateButton(`n${n}`)
     setOtherButtonsInactive(n)
     initState()
   },
@@ -23,12 +30,39 @@ let settings = {
     this.frameRate = this.frameRate + v > 0 ? this.frameRate + v : this.frameRate;
     frameRate(this.frameRate);
   },
+  changeSize: function (v) { 
+    this.size = Math.min(Math.max(this.size*v, 16), 128)
+    setFieldSize(this.size)
+    state.blockSize = width / settings.size;
+    initState();
+  }
+}
+
+function getFrameRateFor(n) {
+  const nToFr = {
+    1: 12,
+    2: 4,
+    3: 2,
+  }
+  return nToFr[n]
 }
 
 function setOtherButtonsInactive(n) {
-  [1, 2, 3].filter(i => i != n).map(i => {
-    document.getElementById(`n${i}`).className = 'button is-info'
+  [1, 2, 3].filter(i => i != n).map(n => {
+    deactivateButton(`n${n}`)
   })
+}
+
+function activateButton(id) {
+  document.getElementById(id).className = 'button is-success'
+}
+
+function deactivateButton(id) {
+  document.getElementById(id).className = 'button is-info'
+}
+
+function setFieldSize(n){
+  document.getElementById('fieldsize').innerText = `${n}x${n} px`
 }
 
 function setup() {
@@ -42,16 +76,16 @@ function setup() {
   const width = initCanvas();
   stroke(0);
   background(120, 120, 120);
-  state.size = 32;
-  state.blockSize = width / state.size;
+  state.blockSize = width / settings.size;
+  setFieldSize(settings.size)
   initState()
 }
 
 function initState() {
   state.field = []
-  for (let x = 0; x < state.size; x++) {
+  for (let x = 0; x <= settings.size; x++) {
     state.field.push([])
-    for (let y = 0; y <= state.size; y++) {
+    for (let y = 0; y <= settings.size; y++) {
       state.field[x][y] = { alive: false, color: { r: 0, g: 0, b: 0, a: 255 } }
     }
   }
@@ -156,7 +190,7 @@ function getColor(nn) {
 
 function initCanvas() {
   var canvasDiv = document.getElementById('p5canvas');
-  var width = canvasDiv.offsetWidth
+  var width = Math.floor(canvasDiv.offsetWidth * 0.7)
   canvas = createCanvas(width, width)
   canvas.parent('p5canvas');
   return width;
