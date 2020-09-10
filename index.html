@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<html>
+
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.0.0/lib/p5.js"></script>
+  <script src="crystal.js"></script>
+</head>
+
+<style>
+  @media only screen and (min-width : 100px) {
+    .canvas-div {
+      width: 80%
+    }
+  }
+
+  @media only screen and (min-width : 1222px) {
+    .canvas-div {
+      width: 50%
+    }
+  }
+
+  .button {
+    margin: 1rem;
+  }
+</style>
+
+<body>
+  <div class="container">
+    <center>
+      <div class="is-size-5" style="margin-top:1rem">
+        <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">Pattern of Life</a>
+      </div>
+      <div class="box">
+        <div class="canvas-div" id="p5canvas"></div>
+        <div class="level-item">
+          <button class="button is-info" type="text" onclick="reset()">Reset</button>
+          <button class="button is-info" type="text" onclick="settings.toggleStroke()">Stroke</button>
+        </div>
+        <div class="level-item">
+          Neighbour Range
+          <button id="n1" class="button is-success" type="text" onclick="settings.changeNRange(1)">1</button>
+          <button id="n2" class="button is-info" type="text" onclick="settings.changeNRange(2)">2</button>
+          <button id="n3" class="button is-info" type="text" onclick="settings.changeNRange(3)">3</button>
+        </div>
+        <div class="level-item">
+          FrameRate
+          <button class="button is-info" type="text" onclick="settings.changeFr(1)">+1</button>
+          <button class="button is-info" type="text" onclick="settings.changeFr(-1)">-1</button>
+        </div>
+        <div class="level-item">
+          Inspired by&nbsp;<a href="http://www.ovaltech.ca/Javascript_Life/crystal_standalone.htm">hyperspaces2020</a>
+        </div>
+      </div>
+    </center>
+  </div>
+  </div>
+</body>
+
+</html>
