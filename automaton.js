@@ -7,7 +7,7 @@ let settings = {
   strokeOn: true,
   nRange: 1,
   framerate: 15,
-  size: 64,
+  size: 32,
   rgbOffsets: [0, 2, 4],
   initColorOffsets: function () {
     this.rgbOffsets = [];
@@ -35,7 +35,7 @@ let settings = {
     this.framerate = this.framerate + v > 0 ? this.framerate + v : this.framerate;
   },
   changeSize: function (v) {
-    this.size = Math.min(Math.max(this.size * v, 16), 1024);
+    this.size = Math.min(Math.max(this.size * v, 16), 128);
     setFieldSize(this.size);
     calcBlockSize();
     initField();
