@@ -30,9 +30,9 @@ function numNeighbours(f, x, y, nRange) {
   return count;
 }
 
+const survive = [2, 3];
+const born = [3, 4];
 function deadOrAlive(alive, nn) {
-  const survive = [2, 3];
-  const born = [3, 4];
   if (alive) {
     return survive.includes(nn)
   } else {

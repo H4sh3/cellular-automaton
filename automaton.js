@@ -129,7 +129,7 @@ function run() {
 }
 
 function initCanvas() {
-  state.width = Math.floor(window.innerWidth * 0.2);
+  state.width = Math.floor(window.innerHeight * 0.5);
   state.height = state.width;
   // pixel size
   state.blockSize = state.width / settings.size;
